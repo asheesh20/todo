@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:todo/screens/new_todo.dart';
+import 'package:todo/utils/colors.dart';
 import 'package:todo/widgets/category_grid.dart';
 
 class BoxMethod extends StatelessWidget {
@@ -19,7 +20,7 @@ class BoxMethod extends StatelessWidget {
         title: 'New Todo',
         icon: Icon(
           Icons.add,
-          color: Colors.yellow,
+          color: yellow,
         ),
       ),
     );

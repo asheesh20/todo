@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
 import 'package:todo/utils/colors.dart';
 
@@ -9,6 +10,9 @@ class NewTodo extends StatefulWidget {
 }
 
 class _NewTodoState extends State<NewTodo> {
+  List<Map<String, dynamic>> hiveData = [];
+  Box box = Hive.box('myBox');
+
   String title = "";
   String description = "";
   DateTime selectedDate = DateTime.now();
@@ -21,6 +25,7 @@ class _NewTodoState extends State<NewTodo> {
 
   @override
   Widget build(BuildContext context) {
+    print(box.toMap().toString());
     String formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
     return Scaffold(
       appBar: AppBar(
@@ -50,17 +55,17 @@ class _NewTodoState extends State<NewTodo> {
                   padding: const EdgeInsets.symmetric(horizontal: 13),
                   child: TextFormField(
                     controller: _titleController,
-                    decoration: InputDecoration(
-                      labelStyle: TextStyle(color: Colors.grey[100]),
-                      enabledBorder: const OutlineInputBorder(
+                    decoration: const InputDecoration(
+                      labelStyle: TextStyle(color: grey100),
+                      enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(color: Colors.white),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade100),
+                        borderSide: BorderSide(color: grey100),
                       ),
-                      fillColor: Colors.grey.shade200,
+                      fillColor: grey100,
                       hintText: 'Enter title here',
-                      hintStyle: const TextStyle(fontWeight: FontWeight.normal),
+                      hintStyle: TextStyle(fontWeight: FontWeight.normal),
                       filled: true,
                       //labelText: 'Title',
                     ),
@@ -96,17 +101,17 @@ class _NewTodoState extends State<NewTodo> {
                   padding: const EdgeInsets.symmetric(horizontal: 13),
                   child: TextFormField(
                     controller: _descriptionController,
-                    decoration: InputDecoration(
-                      labelStyle: TextStyle(color: Colors.grey[100]),
-                      enabledBorder: const OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.white),
+                    decoration: const InputDecoration(
+                      labelStyle: TextStyle(color: grey100),
+                      enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(color: white),
                       ),
                       focusedBorder: OutlineInputBorder(
-                        borderSide: BorderSide(color: Colors.grey.shade100),
+                        borderSide: BorderSide(color: grey100),
                       ),
-                      fillColor: Colors.grey.shade200,
+                      fillColor: grey200,
                       hintText: 'Enter Description here',
-                      hintStyle: const TextStyle(fontWeight: FontWeight.normal),
+                      hintStyle: TextStyle(fontWeight: FontWeight.normal),
                       filled: true,
                       //labelText: 'Title',
                     ),
@@ -143,7 +148,7 @@ class _NewTodoState extends State<NewTodo> {
                       label: Text(
                         // '${selectedDate.toIso8601String().split('T')[0]}',
                         formattedDate,
-                        style: const TextStyle(color: Colors.white),
+                        style: const TextStyle(color: white),
                       ),
                     ),
                     const SizedBox(
@@ -204,11 +209,32 @@ class _NewTodoState extends State<NewTodo> {
                   height: 100,
                 ),
                 AddButton(
-                    formKey: _formKey,
-                    title: title,
-                    description: description,
-                    selectedDate: selectedDate,
-                    isComplete: isComplete),
+                  formKey: _formKey,
+                  title: title,
+                  description: description,
+                  selectedDate: selectedDate,
+                  isComplete: isComplete,
+                  descriptionController: _descriptionController,
+                  titleController: _titleController,
+                  formattedDate: formattedDate,
+                  onTap: () {
+                    Map<String, dynamic> dataMap = {
+                      'title': _titleController.text,
+                      'description': _descriptionController.text,
+                      'date': formattedDate,
+                    };
+                    final box = Hive.box('myBox');
+                    hiveData.add(dataMap);
+
+                    box.put('data', hiveData);
+                    print(box.toMap().toString());
+
+                    /// for clearing the box
+
+                    //final box = Hive.box('myBox');
+                    //box.clear();
+                  },
+                ),
                 const SizedBox(
                   height: 50,
                 ),
@@ -243,6 +269,10 @@ class AddButton extends StatelessWidget {
     required this.description,
     required this.selectedDate,
     required this.isComplete,
+    required this.descriptionController,
+    required this.titleController,
+    required this.formattedDate,
+    required this.onTap,
   }) : _formKey = formKey;
 
   final GlobalKey<FormState> _formKey;
@@ -250,6 +280,11 @@ class AddButton extends StatelessWidget {
   final String description;
   final DateTime selectedDate;
   final bool isComplete;
+  final TextEditingController titleController;
+  final TextEditingController descriptionController;
+  final String formattedDate;
+
+  final void Function()? onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -267,12 +302,10 @@ class AddButton extends StatelessWidget {
         }
       },
       child: GestureDetector(
-        onTap: () {
-          Navigator.of(context).pop();
-        },
+        onTap: onTap,
         child: const Text(
           'Add',
-          style: TextStyle(color: white),
+          style: TextStyle(color: white, fontSize: 20),
         ),
       ),
     );

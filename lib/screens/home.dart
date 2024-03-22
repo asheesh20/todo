@@ -1,9 +1,8 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:get/route_manager.dart';
 import 'package:todo/screens/new_todo.dart';
 import 'package:todo/screens/total_todo.dart';
+import 'package:todo/utils/colors.dart';
 import 'package:todo/widgets/category_grid.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -30,9 +29,7 @@ class HomeScreen extends StatelessWidget {
               const Text(
                 '2',
                 style: TextStyle(
-                    fontSize: 36,
-                    color: Colors.yellow,
-                    fontWeight: FontWeight.bold),
+                    fontSize: 36, color: yellow, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
                 height: 30,
@@ -52,7 +49,7 @@ class HomeScreen extends StatelessWidget {
                       title: 'Update Todo',
                       icon: Icon(
                         Icons.pin_end_rounded,
-                        color: Colors.yellow,
+                        color: yellow,
                       ),
                     ),
                   ),
@@ -72,7 +69,7 @@ class HomeScreen extends StatelessWidget {
                       title: 'Total Todo',
                       icon: Icon(
                         Icons.checklist_sharp,
-                        color: Colors.yellow,
+                        color: yellow,
                       ),
                     ),
                   ),
@@ -87,7 +84,7 @@ class HomeScreen extends StatelessWidget {
                       title: 'Delete Todo',
                       icon: Icon(
                         Icons.delete_outline,
-                        color: Colors.yellow,
+                        color: yellow,
                       ),
                     ),
                   ),
@@ -117,7 +114,7 @@ class BoxMethod extends StatelessWidget {
         title: 'New Todo',
         icon: Icon(
           Icons.add,
-          color: Colors.yellow,
+          color: yellow,
         ),
       ),
     );

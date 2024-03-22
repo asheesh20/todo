@@ -66,7 +66,7 @@ class TotalTodo extends StatelessWidget {
   }
 }
 */
-
+/*
 import 'package:flutter/material.dart';
 import 'package:get/instance_manager.dart';
 
@@ -125,6 +125,37 @@ class TotalTodo extends StatelessWidget {
           child: Text('No Task Found'),
         ),
         */
+      ),
+    );
+  }
+}
+*/
+
+import 'package:flutter/material.dart';
+import 'package:todo/utils/colors.dart';
+
+class TotalTodo extends StatelessWidget {
+  const TotalTodo({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Padding(
+          padding: EdgeInsets.all(25),
+          child: Container(
+            padding: EdgeInsets.all(24),
+            child: Row(
+              children: [
+                Text('Tutorial'),
+              ],
+            ),
+            decoration: BoxDecoration(
+              color: grey100,
+              borderRadius: BorderRadius.circular(12),
+            ),
+          ),
+        ),
       ),
     );
   }

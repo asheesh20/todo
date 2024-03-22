@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 class CategoryGrid extends StatelessWidget {
   const CategoryGrid({super.key, required this.title, required this.icon});
 
-  //final Category category;
   final String title;
   final Icon icon;
 
