@@ -10,8 +10,16 @@ class NewTodo extends StatefulWidget {
 }
 
 class _NewTodoState extends State<NewTodo> {
-  List<Map<String, dynamic>> hiveData = [];
-  Box box = Hive.box('myBox');
+  final box = Hive.box('myBox');
+  List<dynamic> hiveData = [];
+
+  @override
+  void initState() {
+    hiveData.addAll(box.get('data'));
+    print(hiveData);
+    super.initState();
+  }
+  //Box box = Hive.box('myBox');
 
   String title = "";
   String description = "";
@@ -25,7 +33,7 @@ class _NewTodoState extends State<NewTodo> {
 
   @override
   Widget build(BuildContext context) {
-    print(box.toMap().toString());
+    // print(box.toMap().toString());
     String formattedDate = DateFormat('dd/MM/yyyy').format(selectedDate);
     return Scaffold(
       appBar: AppBar(
@@ -222,6 +230,7 @@ class _NewTodoState extends State<NewTodo> {
                       'title': _titleController.text,
                       'description': _descriptionController.text,
                       'date': formattedDate,
+                      //'isComplete': isComplete,
                     };
                     final box = Hive.box('myBox');
                     hiveData.add(dataMap);

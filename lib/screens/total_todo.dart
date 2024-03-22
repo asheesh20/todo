@@ -132,29 +132,58 @@ class TotalTodo extends StatelessWidget {
 */
 
 import 'package:flutter/material.dart';
-import 'package:todo/utils/colors.dart';
+import 'package:flutter/widgets.dart';
+import 'package:hive/hive.dart';
+import 'package:todo/model/task.dart';
 
-class TotalTodo extends StatelessWidget {
+class TotalTodo extends StatefulWidget {
   const TotalTodo({super.key});
+
+  @override
+  State<TotalTodo> createState() => _TotalTodoState();
+}
+
+class _TotalTodoState extends State<TotalTodo> {
+  final box = Hive.box('myBox');
+  List<dynamic> hiveData = [];
+
+  @override
+  void initState() {
+    hiveData.addAll(box.get('data'));
+    print(hiveData);
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        title: const Text('Total Todo'),
+      ),
       body: SafeArea(
-        child: Padding(
-          padding: EdgeInsets.all(25),
-          child: Container(
-            padding: EdgeInsets.all(24),
-            child: Row(
-              children: [
-                Text('Tutorial'),
-              ],
-            ),
-            decoration: BoxDecoration(
-              color: grey100,
-              borderRadius: BorderRadius.circular(12),
-            ),
-          ),
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: hiveData.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin: EdgeInsets.symmetric(vertical: 8, horizontal: 15),
+                    padding: EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200], // Background color
+                      borderRadius:
+                          BorderRadius.circular(10), // Rounded corners
+                    ),
+                    child: ListTile(
+                      title: Text(hiveData[index]['title']),
+                      subtitle: Text(hiveData[index]['description']),
+                    ),
+                  );
+                },
+              ),
+            )
+          ],
         ),
       ),
     );

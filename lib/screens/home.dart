@@ -63,6 +63,7 @@ class HomeScreen extends StatelessWidget {
                 children: [
                   GestureDetector(
                     onTap: () {
+                      // Get.to(const TotalTodo(taskTitle: ));
                       Get.to(const TotalTodo());
                     },
                     child: const CategoryGrid(
