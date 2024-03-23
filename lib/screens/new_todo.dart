@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:hive/hive.dart';
 import 'package:intl/intl.dart';
+import 'package:todo/screens/home.dart';
 import 'package:todo/utils/colors.dart';
 
 class NewTodo extends StatefulWidget {
@@ -230,13 +233,14 @@ class _NewTodoState extends State<NewTodo> {
                       'title': _titleController.text,
                       'description': _descriptionController.text,
                       'date': formattedDate,
-                      //'isComplete': isComplete,
+                      'isComplete': isComplete,
                     };
                     final box = Hive.box('myBox');
                     hiveData.add(dataMap);
 
                     box.put('data', hiveData);
                     print(box.toMap().toString());
+                    Navigator.of(context).pop();
 
                     /// for clearing the box
 

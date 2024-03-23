@@ -1,16 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:hive/hive.dart';
 import 'package:todo/model/task.dart';
+import 'package:todo/utils/alert_box.dart';
 import 'package:todo/utils/colors.dart';
 
-class TotalTodo extends StatefulWidget {
-  const TotalTodo({super.key});
+class DeleteTodo extends StatefulWidget {
+  const DeleteTodo({super.key});
 
   @override
-  State<TotalTodo> createState() => _TotalTodoState();
+  State<DeleteTodo> createState() => _DeleteTodoState();
 }
 
-class _TotalTodoState extends State<TotalTodo> {
+class _DeleteTodoState extends State<DeleteTodo> {
   final box = Hive.box('myBox');
   List<dynamic> hiveData = [];
 
@@ -26,7 +27,7 @@ class _TotalTodoState extends State<TotalTodo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Total Todo'),
+        title: const Text('Delete Todo'),
       ),
       body: SafeArea(
         child: Column(
@@ -64,17 +65,26 @@ class _TotalTodoState extends State<TotalTodo> {
                         style: TextStyle(fontSize: 23, color: backgroundColor),
                       ),
                       subtitle: Text(hiveData[index]['description']),
+                      trailing: GestureDetector(
+                          onTap: () {
+                            setState(() {
+                              print(hiveData.length);
+                              print(hiveData);
+                              print(hiveData[index]);
+                              hiveData.removeAt(index);
+                              print(hiveData.length);
 
-                      /*
-                      trailing: Container(
-                        width: 48.0,
-                        height: 48.0,
-                        decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: hiveData[index]['isComplete'] ? green : red,
-                        ),
-                      ),
-                      */
+                              print("after removing == $hiveData");
+                              box.put('data', hiveData);
+                            });
+                            /*showDialog(
+                                context: context,
+                                builder: (context) {
+                                  return DialogBox();
+                                });
+                                */
+                          },
+                          child: Icon(Icons.delete)),
                     ),
                   );
                 },

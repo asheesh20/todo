@@ -1,12 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:get/route_manager.dart';
+import 'package:hive/hive.dart';
+import 'package:todo/screens/delete.dart';
 import 'package:todo/screens/new_todo.dart';
 import 'package:todo/screens/total_todo.dart';
+import 'package:todo/screens/update.dart';
 import 'package:todo/utils/colors.dart';
 import 'package:todo/widgets/category_grid.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  HomeScreen({
+    super.key,
+  });
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  final box = Hive.box('myBox');
+
+  List<dynamic> hiveData = [];
+
+  @override
+  void initState() {
+    hiveData.addAll(box.get('data'));
+    print(hiveData);
+    int count = hiveData.length;
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -26,9 +48,9 @@ class HomeScreen extends StatelessWidget {
               const SizedBox(
                 height: 20,
               ),
-              const Text(
-                '2',
-                style: TextStyle(
+              Text(
+                '${hiveData.length}',
+                style: const TextStyle(
                     fontSize: 36, color: yellow, fontWeight: FontWeight.bold),
               ),
               const SizedBox(
@@ -43,7 +65,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.to(const NewTodo());
+                      Get.to(const UpdateTodo());
                     },
                     child: const CategoryGrid(
                       title: 'Update Todo',
@@ -79,7 +101,7 @@ class HomeScreen extends StatelessWidget {
                   ),
                   GestureDetector(
                     onTap: () {
-                      Get.to(const NewTodo());
+                      Get.to(const DeleteTodo());
                     },
                     child: const CategoryGrid(
                       title: 'Delete Todo',

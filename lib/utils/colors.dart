@@ -9,3 +9,5 @@ const white = Colors.white;
 const yellow = Colors.yellow;
 const grey200 = Color(0xFFEEEEEE); // shade[200]
 const grey100 = Color(0xFFF5F5F5); // shade[100]
+const red = Colors.red;
+const green = Colors.green;

@@ -1,16 +1,19 @@
 import 'package:flutter/material.dart';
+import 'package:get/get_core/src/get_main.dart';
+import 'package:get/get_navigation/get_navigation.dart';
 import 'package:hive/hive.dart';
 import 'package:todo/model/task.dart';
+import 'package:todo/screens/new_todo.dart';
 import 'package:todo/utils/colors.dart';
 
-class TotalTodo extends StatefulWidget {
-  const TotalTodo({super.key});
+class UpdateTodo extends StatefulWidget {
+  const UpdateTodo({super.key});
 
   @override
-  State<TotalTodo> createState() => _TotalTodoState();
+  State<UpdateTodo> createState() => _UpdateTodoState();
 }
 
-class _TotalTodoState extends State<TotalTodo> {
+class _UpdateTodoState extends State<UpdateTodo> {
   final box = Hive.box('myBox');
   List<dynamic> hiveData = [];
 
@@ -64,6 +67,13 @@ class _TotalTodoState extends State<TotalTodo> {
                         style: TextStyle(fontSize: 23, color: backgroundColor),
                       ),
                       subtitle: Text(hiveData[index]['description']),
+                      trailing: GestureDetector(
+                          onTap: () {
+                            // Get.to(UpdateTodo);
+                            Navigator.of(context).push(MaterialPageRoute(
+                                builder: ((context) => NewTodo())));
+                          },
+                          child: const Icon(Icons.pin_end_rounded)),
 
                       /*
                       trailing: Container(
