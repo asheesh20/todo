@@ -26,7 +26,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     hiveData.addAll(box.get('data'));
     print(hiveData);
-    int count = hiveData.length;
     super.initState();
   }
 
@@ -59,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  BoxMethod(),
+                  const BoxMethod(),
                   const SizedBox(
                     width: 30,
                   ),
