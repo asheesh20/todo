@@ -1,3 +1,5 @@
+/*
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:hive/hive.dart';
@@ -116,6 +118,135 @@ String _extractMonth(String dateString) {
 
   return '$month'; // Assuming date format is DD/MM/YY
 }
+
+*/
+
+import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
+import 'package:todo/utils/colors.dart';
+
+class DeleteTodo extends StatefulWidget {
+  const DeleteTodo({Key? key}) : super(key: key);
+
+  @override
+  State<DeleteTodo> createState() => _DeleteTodoState();
+}
+
+class _DeleteTodoState extends State<DeleteTodo> {
+  final box = Hive.box('myBox');
+  List<dynamic> hiveData = [];
+
+  @override
+  void initState() {
+    hiveData.addAll(box.get('data'));
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Delete Todo'),
+      ),
+      body: SafeArea(
+        child: Column(
+          children: [
+            Expanded(
+              child: ListView.builder(
+                itemCount: hiveData.length,
+                itemBuilder: (context, index) {
+                  return Container(
+                    margin:
+                        const EdgeInsets.symmetric(vertical: 8, horizontal: 20),
+                    padding: const EdgeInsets.all(8),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[200],
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: ListTile(
+                      leading: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            _extractDate(hiveData[index]['date']),
+                            style: const TextStyle(fontSize: 19),
+                          ),
+                          Text(
+                            _extractMonth(hiveData[index]['date']),
+                            style: const TextStyle(fontSize: 19),
+                          ),
+                        ],
+                      ),
+                      title: Text(
+                        hiveData[index]['title'],
+                        style: TextStyle(fontSize: 23, color: backgroundColor),
+                      ),
+                      subtitle: Text(hiveData[index]['description']),
+                      trailing: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            hiveData.removeAt(index);
+                            box.put('data', hiveData);
+                          });
+                        },
+                        child: const Icon(Icons.delete),
+                      ),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  String _extractDate(String dateString) {
+    List<String> dateParts = dateString.split("/");
+    String day = dateParts[0];
+    return '$day';
+  }
+
+  String _extractMonth(String dateString) {
+    List<String> dateParts = dateString.split("/");
+    String month = dateParts[1];
+    return '$month';
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
