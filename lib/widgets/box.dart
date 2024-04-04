@@ -14,7 +14,7 @@ class BoxMethod extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(const NewTodo());
+        Get.to(NewTodo());
       },
       child: const CategoryGrid(
         title: 'New Todo',

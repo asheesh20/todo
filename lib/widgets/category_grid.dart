@@ -11,7 +11,7 @@ class CategoryGrid extends StatelessWidget {
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(16),
-        color: const Color.fromARGB(224, 39, 4, 196),
+        color: const Color(0xFF012B5B),
       ),
       width: 140,
       height: 140,

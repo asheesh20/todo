@@ -24,8 +24,13 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
-    hiveData.addAll(box.get('data'));
-    print(hiveData);
+    setState(() {
+      hiveData.addAll(box.get('data'));
+      print(hiveData);
+    });
+    // hiveData.addAll(box.get('data'));
+    //print(hiveData);
+    // int count = hiveData.length;
     super.initState();
   }
 
@@ -130,7 +135,7 @@ class BoxMethod extends StatelessWidget {
   Widget build(BuildContext context) {
     return GestureDetector(
       onTap: () {
-        Get.to(const NewTodo());
+        Get.to(NewTodo());
       },
       child: const CategoryGrid(
         title: 'New Todo',

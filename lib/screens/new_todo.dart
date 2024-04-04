@@ -1,3 +1,6 @@
+/*
+
+
 import 'package:flutter/material.dart';
 import 'package:get/get_core/src/get_main.dart';
 import 'package:get/get_navigation/get_navigation.dart';
@@ -324,3 +327,332 @@ class AddButton extends StatelessWidget {
     );
   }
 }
+
+
+*/
+
+/*
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:todo/controller/new_todo.controller.dart';
+import 'package:todo/utils/colors.dart';
+
+class NewTodo extends StatelessWidget {
+  final NewTodoController controller = Get.put(NewTodoController());
+
+  @override
+  Widget build(context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('New Todo'),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              Obx(
+                () => TextFormField(
+                  decoration: const InputDecoration(
+                    labelStyle: TextStyle(color: grey100),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: grey100),
+                    ),
+                    fillColor: grey100,
+                    hintText: 'Enter title here',
+                    hintStyle: TextStyle(fontWeight: FontWeight.normal),
+                    filled: true,
+                  ),
+                  enableSuggestions: false,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter a title';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) => controller.title.value = value,
+                ),
+              ),
+              const SizedBox(height: 20),
+              Obx(
+                () => TextFormField(
+                  decoration: const InputDecoration(
+                    labelStyle: TextStyle(color: grey100),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: white),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: grey100),
+                    ),
+                    fillColor: grey200,
+                    hintText: 'Enter Description here',
+                    hintStyle: TextStyle(fontWeight: FontWeight.normal),
+                    filled: true,
+                    //labelText: 'Title',
+                  ),
+                  enableSuggestions: false,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter a description';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) => controller.description.value = value,
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Obx(
+                () => TextButton(
+                  onPressed: () async {
+                    final DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: controller.selectedDate.value,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100),
+                    );
+                    if (pickedDate != null) {
+                      controller.selectDate(pickedDate);
+                    }
+                  },
+                  child: Text(
+                      'Select Date: ${DateFormat('dd/MM/yyyy').format(controller.selectedDate.value)}'),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              Obx(
+                () => CheckboxListTile(
+                  title: const Text('Complete'),
+                  value: controller.isComplete.value,
+                  onChanged: (value) => controller.setComplete(value ?? false),
+                ),
+              ),
+              const SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  controller.saveTodo();
+                  Get.back();
+                },
+                child: const Text('Add'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+*/
+
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:intl/intl.dart';
+import 'package:todo/controller/new_todo.controller.dart';
+import 'package:todo/utils/colors.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class NewTodo extends StatelessWidget {
+  final NewTodoController controller = Get.put(NewTodoController());
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('New Todo'),
+      ),
+      body: SingleChildScrollView(
+        child: Padding(
+          padding: const EdgeInsets.all(20.0),
+          child: Column(
+            children: [
+              GetBuilder<NewTodoController>(
+                builder: (_) => TextFormField(
+                  decoration: const InputDecoration(
+                    labelStyle: TextStyle(color: grey100),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.white),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: grey100),
+                    ),
+                    fillColor: grey100,
+                    hintText: 'Enter title here',
+                    hintStyle: TextStyle(fontWeight: FontWeight.normal),
+                    filled: true,
+                    //labelText: 'text'
+                  ),
+                  enableSuggestions: false,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter a title';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) => controller.title.value = value,
+                ),
+              ),
+              const SizedBox(height: 20),
+              GetBuilder<NewTodoController>(
+                builder: (_) => TextFormField(
+                  decoration: const InputDecoration(
+                    labelStyle: TextStyle(color: grey100),
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: white),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: grey100),
+                    ),
+                    fillColor: grey200,
+                    hintText: 'Enter Description here',
+                    hintStyle: TextStyle(fontWeight: FontWeight.normal),
+                    filled: true,
+                  ),
+                  enableSuggestions: false,
+                  validator: (value) {
+                    if (value == null || value.trim().isEmpty) {
+                      return 'Please enter a description';
+                    }
+                    return null;
+                  },
+                  onChanged: (value) => controller.description.value = value,
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              GetBuilder<NewTodoController>(
+                builder: (_) => TextButton(
+                  onPressed: () async {
+                    final DateTime? pickedDate = await showDatePicker(
+                      context: context,
+                      initialDate: controller.selectedDate.value,
+                      firstDate: DateTime(1900),
+                      lastDate: DateTime(2100),
+                    );
+                    if (pickedDate != null) {
+                      controller.selectDate(pickedDate);
+                    }
+                  },
+                  child: Text(
+                    'Select Date: ${DateFormat('dd/MM/yyyy').format(controller.selectedDate.value)}',
+                  ),
+                ),
+              ),
+              const SizedBox(
+                height: 20,
+              ),
+              GetBuilder<NewTodoController>(
+                builder: (_) => CheckboxListTile(
+                  title: const Text('Complete'),
+                  value: controller.isComplete.value,
+                  onChanged: (value) => controller.setComplete(value ?? false),
+                ),
+              ),
+              const SizedBox(height: 20),
+              /*
+              ElevatedButton(
+                onPressed: () async {
+                  // Get the docId
+                  final String docId = await controller.saveTodo();
+
+                  // Store data to Firestore
+                  final Map<String, dynamic> data = {
+                    'title': controller.title.value,
+                    'description': controller.description.value,
+                    'date': DateFormat('dd/MM/yyyy')
+                        .format(controller.selectedDate.value),
+                    'isComplete': controller.isComplete.value,
+                    'docId': docId
+                  };
+
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection('todos')
+                        .add(data);
+                    print('Data saved to Firestore');
+                  } catch (e) {
+                    print('Error saving data: $e');
+                  }
+
+                  Get.back();
+                },
+                child: const Text('Add'),
+              ),
+              */
+              ElevatedButton(
+                onPressed: () async {
+                  final String docId = await controller.saveTodo();
+
+                  final Map<String, dynamic> data = {
+                    'title': controller.title.value,
+                    'description': controller.description.value,
+                    'date': DateFormat('dd/MM/yyyy')
+                        .format(controller.selectedDate.value),
+                    'isComplete': controller.isComplete.value,
+                    'docId': docId
+                  };
+
+                  try {
+                    await FirebaseFirestore.instance
+                        .collection('todos')
+                        .doc(docId) // Use the obtained docId here
+                        .set(data);
+                    print('Data saved to Firestore');
+                  } catch (e) {
+                    print('Error saving data: $e');
+                  }
+
+                  Get.back();
+                },
+                child: const Text('Add'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+void saveDataToFirestore() async {
+    final Map<String, dynamic> data = {
+      'title': controller.title.value,
+      'description': controller.description.value,
+      'date': DateFormat('dd/MM/yyyy').format(controller.selectedDate.value),
+      'isComplete': controller.isComplete.value,
+    };
+
+    try {
+      await firestore.collection('todos').add(data);
+      print('Data saved to Firestore');
+    } catch (e) {
+      print('Error saving data: $e');
+    }
+  }
+}
+
+*/
